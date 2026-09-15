@@ -224,7 +224,7 @@ Useful contributions include:
 
 Copyright © 2026 Taylan Arslan.
 
-This project is available for **research, educational, academic, personal, and other non-commercial use** under the terms of the [`LICENSE`](LICENSE) file.
+This project is available for **research, educational, academic, personal, and other non-commercial use** under the terms of the [`LICENSE.md`](LICENSE) file.
 
 **Commercial use is not permitted under the public license.**
 
