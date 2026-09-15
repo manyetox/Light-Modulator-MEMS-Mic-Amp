@@ -1,300 +1,247 @@
-# Light Modulator + MEMS Mic Amplifier
+<div align="center">
 
-> Compact hardware for controlled optical-audio experiments using a modulated laser/LED source and an amplified MEMS microphone.
+# Light Modulator + MEMS Mic Amp
 
-**Status:** Prototype / active development  
-**Designed in:** KiCad  
-**Focus:** Optical modulation • MEMS microphones • Analog electronics • Hardware experimentation
+**A compact two-board hardware platform for experimenting with optical audio modulation and MEMS microphone response.**
 
----
+[![Hardware](https://img.shields.io/badge/Hardware-PCB-2ea44f)](#)
+[![Designed with KiCad](https://img.shields.io/badge/Designed%20with-KiCad-314CB0?logo=kicad&logoColor=white)](https://www.kicad.org/)
+[![Status](https://img.shields.io/badge/status-prototype-orange)](#project-status)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-blue)](#license)
+
+**Bluetooth audio → current-modulated LED/laser → MEMS microphone → audio amplifier**
+
+</div>
+
+> [!WARNING]
+> **Laser safety:** This project can drive visible and near-infrared laser diodes. Near-IR beams may be difficult or impossible to see. Use the lowest practical optical power, a proper beam stop/enclosure, appropriate eye protection, and never aim a beam at people or reflective surfaces.
 
 ## Overview
 
-This repository contains the PCB designs for two complementary experimental boards:
+This project is an experimental hardware platform for studying **optical audio injection into analogue microphones**.
 
-| Board | Function |
+It consists of two PCBs:
+
+| Transmitter | Receiver |
 |---|---|
-| **Light Modulator** | Converts an audio signal into intensity modulation of a laser diode or LED |
-| **MEMS Mic Amplifier** | Powers a MEMS microphone and amplifies its analog output for measurement |
+| Receives audio over Bluetooth | Supports multiple analogue microphone types |
+| Mixes stereo audio to mono | Low-noise microphone preamplifier |
+| Adds adjustable DC bias and modulation depth | Speaker/audio output stage |
+| Drives an LED or laser with an analogue current waveform | Allows microphone-to-microphone comparison |
+| Uses a closed-loop current sink | Can be monitored with an oscilloscope |
 
-Together, the boards form a compact experimental platform for studying the response of MEMS microphones to modulated optical signals.
+The transmitter has already been **bench-tested and is functional**. Receiver validation is ongoing.
 
-The project was developed primarily for controlled laboratory experiments and hardware characterization.
-
----
-
-## How It Works
+## System Architecture
 
 ```mermaid
 flowchart LR
-    A["Audio Source"] --> B["Bluetooth / Audio Input"]
-    B --> C["Light Modulator"]
-    C --> D["Laser / LED"]
-    D -->|Modulated Light| E["MEMS Microphone"]
-    E --> F["Mic Amplifier"]
-    F --> G["Oscilloscope / ADC / Audio Output"]
+    A[Phone / Audio Source] -->|Bluetooth| B[MH-M18]
+    B --> C[Stereo-to-Mono Mix]
+    C --> D[Modulation Depth]
+    E[DC Bias] --> F[VSET]
+    D --> F
+    F --> G[CA3140 Control Loop]
+    G --> H[IRLB8748 Current Sink]
+    H --> I[LED / Laser]
+
+    I -. Modulated Light .-> J[Analogue MEMS Microphone]
+    J --> K[MCP6281 Preamp]
+    K --> L[Volume Control]
+    L --> M[LM386 Audio Amp]
+    M --> N[Speaker / Oscilloscope]
 ```
 
-The transmitter varies the optical emitter intensity according to the incoming audio waveform.
+## Transmitter
 
-The modulated light is directed toward a MEMS microphone under test. Any resulting electrical response is amplified by the receiver board and can then be observed using an oscilloscope, ADC, audio interface, or other measurement equipment.
-
----
-
-## Hardware
-
-### Light Modulator
-
-The light-modulator PCB is designed to provide a compact optical transmitter for experimentation.
-
-**Main functions:**
-
-- Bluetooth/audio input
-- Analog audio conditioning
-- Current-controlled laser/LED modulation
-- Replaceable optical emitter
-- Adjustable operating point
-- Accessible test points for measurement and debugging
-
-The circuit is intended to reproduce the audio waveform as an optical-intensity modulation rather than simply switching the emitter on and off.
-
-### MEMS Microphone Amplifier
-
-The second PCB provides the microphone-side analog electronics.
-
-**Main functions:**
-
-- MEMS microphone interface
-- Microphone bias/power
-- Low-noise analog amplification
-- Signal conditioning
-- Accessible analog output for measurement
-
-This allows very small microphone signals to be observed directly with laboratory equipment.
-
----
-
-## Experimental Setup
-
-A typical bench setup looks like:
+The transmitter converts Bluetooth audio into a controlled LED or laser current.
 
 ```text
-                    OPTICAL PATH
-             ───────────────────────►
-
- Audio                Laser / LED              MEMS Mic
- Source                    │                       │
-   │                        │                       │
-   ▼                        ▼                       ▼
-┌────────┐             ┌─────────┐            ┌─────────┐
-│ Light  │────────────►│ Optical │───────────►│ Mic PCB │
-│Modulator│            │ Emitter │            │ + Amp   │
-└────────┘             └─────────┘            └────┬────┘
-                                                   │
-                                                   ▼
-                                             Oscilloscope
+Phone
+  ↓ Bluetooth
+MH-M18
+  ↓
+L/R audio mixed to mono
+  ↓
+Modulation-depth control
+  ↓
+DC bias + audio = VSET
+  ↓
+CA3140
+  ↓
+IRLB8748 current sink
+  ↓
+LED / laser diode
 ```
 
-Useful variables to characterize include:
+The CA3140 compares the requested control voltage (`VSET`) with the voltage across the current-sense resistor and drives the IRLB8748 until they match.
 
-| Variable | Example measurement |
+The approximate optical-source current is:
+
+\[
+I_{LED} \approx \frac{V_{SET}}{R_{SENSE}}
+\]
+
+This causes the LED or laser brightness to follow the audio waveform while maintaining an adjustable DC operating point.
+
+### Main Transmitter Components
+
+| Component | Function |
 |---|---|
-| Audio frequency | Frequency response |
-| Optical power | Microphone output amplitude |
-| Emitter wavelength | Optical sensitivity |
-| Distance | Received signal vs. range |
-| Alignment | Sensitivity to beam position |
-| Modulation depth | Linearity |
-| Amplifier gain | Signal-to-noise ratio |
-| Microphone model | Device-to-device response |
-
----
-
-## Getting Started
-
-1. Download or clone the repository.
-2. Open the KiCad project files.
-3. Review the schematic and PCB revision before manufacturing.
-4. Check the BOM against the revision you are building.
-5. Assemble and inspect the PCB.
-6. Power the board from a **current-limited bench supply** for first bring-up.
-7. Verify all supply rails before installing the optical emitter or microphone.
-8. Test the transmitter with an **LED first** before moving to a laser diode.
-9. Observe the modulated output using an oscilloscope.
-10. Connect the MEMS microphone board and begin characterization.
+| **MH-M18** | Bluetooth audio receiver |
+| **CA3140** | Current-control error amplifier |
+| **IRLB8748** | Power MOSFET / controlled current sink |
+| **LM7805** | 5 V supply for Bluetooth module |
+| **RV2** | DC bias / optical operating point |
+| **RV3** | Audio modulation depth |
+| **R<sub>SENSE</sub>** | Sets the current range |
 
 <details>
-<summary><strong>Recommended first power-up procedure</strong></summary>
+<summary><strong>Current-limit examples</strong></summary>
 
-<br>
+With the present bias network, the maximum DC `VSET` is approximately **0.82 V**.
 
-Before connecting an optical emitter:
+| R<sub>SENSE</sub> | Approx. maximum DC current |
+|---:|---:|
+| 120 Ω | 6.8 mA |
+| 22 Ω | 37 mA |
+| 16.2 Ω | 51 mA |
+| 4.3 Ω | 190 mA |
 
-- Inspect for shorts between power and ground.
-- Use a current-limited laboratory supply.
-- Verify each regulator output.
-- Check DC bias points around the analog stages.
-- Feed a low-amplitude sine wave into the audio input.
-- Observe the driver output with an oscilloscope.
-- Start with an inexpensive LED.
-- Only install the intended laser diode after the modulation circuit has been verified.
+The resistor must be selected for the specific LED or laser being tested.
+
+Audio modulation can create instantaneous current peaks above the DC operating point.
 
 </details>
 
----
+## Receiver
 
-## Design Goals
+The receiver is designed to make the microphone response easy to hear and measure.
 
-The hardware is being developed around a few simple principles:
-
-- **Compact** — small enough to integrate easily into optical experiments.
-- **Low cost** — built primarily from readily obtainable components.
-- **Modular** — optical emitters and microphones can be changed between experiments.
-- **Measurable** — important internal signals are accessible for debugging.
-- **Reproducible** — PCB files and experimental parameters can be documented together.
-- **Hackable** — the design is intended to evolve as measurements reveal what matters.
-
----
-
-## What I Want to Measure
-
-Rather than treating the system as a black box, the goal is to characterize the full signal chain:
-
-```mermaid
-flowchart TD
-    A["Electrical Audio Input"] --> B["Optical Modulator"]
-    B --> C["Optical Power"]
-    C --> D["MEMS Sensor Response"]
-    D --> E["Analog Amplifier"]
-    E --> F["Measured Output"]
-
-    G["Frequency"] -.-> B
-    H["Wavelength"] -.-> C
-    I["Distance / Alignment"] -.-> D
-    J["Gain"] -.-> E
+```text
+Analogue microphone
+  ↓
+AC coupling
+  ↓
+MCP6281 preamplifier
+  ↓
+Volume control
+  ↓
+LM386 audio amplifier
+  ↓
+8 Ω speaker / oscilloscope
 ```
 
-Interesting measurements include:
+### Microphone Options
 
-- frequency-response curves,
-- optical-power versus received-signal amplitude,
-- wavelength dependence,
-- distortion and harmonic content,
-- maximum usable modulation bandwidth,
-- signal-to-noise ratio,
-- microphone-to-microphone variation,
-- beam-position sensitivity,
-- and the effect of distance and optical alignment.
+The receiver platform is intended for comparison between different analogue microphone technologies, including:
 
----
+- **Infineon IM68A130** analogue MEMS microphone
+- **TDK InvenSense ICS-40300** analogue MEMS microphone
+- **ADMP401 breakout module** as a reference microphone
+- Conventional electret microphone for control measurements
+
+The onboard MCP6281 stage provides approximately **×48 voltage gain** for low-level microphone signals.
+
+The LM386 provides the final power amplification for an 8 Ω speaker.
+
+> [!NOTE]
+> The ADMP401 breakout includes its own amplification, so it should be evaluated separately before feeding it through the full onboard microphone gain stage.
+
+## Quick Start
+
+1. **Choose the optical source.** Start with an LED before moving to a laser diode.
+2. **Set the current range.** Select `R_SENSE` for the required current before connecting the optical device.
+3. **Power the transmitter.** Verify the supply rails before fitting the LED or laser.
+4. **Connect Bluetooth audio.** Pair a phone with the MH-M18 and play a low-volume test signal.
+5. **Set the DC bias.** Increase the optical operating point gradually.
+6. **Add modulation.** Increase the modulation-depth control while observing the output on an oscilloscope if available.
+7. **Test the receiver.** Aim the modulated light at the microphone and monitor the recovered signal through the speaker or oscilloscope.
+
+## Project Goals
+
+This project is intended as a practical experimental platform for:
+
+- reproducing and exploring optical-to-electrical coupling in analogue MEMS microphones;
+- comparing microphone responses across different devices and optical wavelengths;
+- testing different modulation depths, bias currents and optical sources;
+- providing an inexpensive alternative to laboratory-only modulation hardware;
+- making the phenomenon easy to demonstrate and measure on the bench.
 
 ## Project Status
 
-This project is currently in the **prototype and characterization stage**.
-
-PCB revisions may change as hardware is assembled and tested.
-
-### Current
-
-- [x] Initial circuit design
-- [x] PCB development
-- [x] Optical-modulator prototype
-- [x] MEMS microphone amplifier prototype
-- [ ] Full electrical characterization
-- [ ] Frequency-response measurements
-- [ ] Optical wavelength comparison
-- [ ] Documented oscilloscope results
-- [ ] Final optimized PCB revision
-
----
-
-## Results
-
-Experimental plots, oscilloscope captures, PCB photographs, and test results will be added here as the project develops.
-
-> **Tip:** If you are browsing this project later, check the repository history for the PCB revision associated with each measurement.
-
-<!--
-Suggested future images:
-
-docs/images/modulator-pcb.jpg
-docs/images/memsmic-pcb.jpg
-docs/images/test-setup.jpg
-docs/images/oscilloscope-result.png
--->
-
----
+| Subsystem | Status |
+|---|---|
+| Bluetooth audio input | ✅ Bench tested |
+| Audio mixing / modulation | ✅ Bench tested |
+| CA3140 + IRLB8748 current control | ✅ Bench tested |
+| LED modulation | ✅ Bench tested |
+| Laser-diode operation | 🧪 Device-dependent testing |
+| MEMS receiver PCB | 🧪 Prototype / validation |
+| Multi-microphone comparison | 🔬 Planned testing |
 
 ## Background
 
-This project is related to research demonstrating that amplitude-modulated light can produce electrical responses in certain MEMS microphones.
-
-A major reference for the experiment is:
+This project is inspired by the research presented in:
 
 **T. Sugawara, B. Cyr, S. Rampazzi, D. Genkin and K. Fu,  
 “Light Commands: Laser-Based Audio Injection Attacks on Voice-Controllable Systems,”  
 29th USENIX Security Symposium, 2020.**
 
-The hardware in this repository is intended for controlled experimental study of the underlying phenomenon.
+- [USENIX paper and presentation](https://www.usenix.org/conference/usenixsecurity20/presentation/sugawara)
+- [Light Commands project website](https://lightcommands.com/)
 
----
+The original research demonstrated that amplitude-modulated light can induce electrical signals in MEMS microphones.
 
-## Safety
+This repository is an **independent experimental hardware implementation** intended for controlled research and educational testing.
 
-> [!CAUTION]
-> **Lasers can cause permanent eye injury.**
+## Safety and Responsible Use
 
-Always verify the wavelength, optical power, and safe operating current of the emitter before use.
+This repository is intended for **laboratory, educational and defensive research**.
 
-- Do not point a laser toward people or animals.
-- Do not view a laser beam directly or through optical instruments.
-- Use an enclosed optical path whenever practical.
-- Use appropriate laser safety equipment for the wavelength and power being tested.
-- Disable the emitter while adjusting the mechanical setup whenever possible.
-- Start initial circuit testing with an LED instead of a laser.
-- Do not exceed the rated current of the optical emitter.
+Do not direct lasers at people, vehicles, cameras, public devices or equipment you do not own or have explicit permission to test.
 
-This project should only be used on equipment you own or have explicit permission to test.
+Use appropriate laser controls for the wavelength and optical power being used.
 
----
+Infrared laser sources deserve particular care because the beam may not be visible.
 
 ## Contributing
 
-Measurements and hardware improvements are welcome.
+Suggestions, measurements, microphone comparisons and hardware improvements are welcome.
 
-If you reproduce the experiment or modify the PCB, useful information to include is:
+For substantial changes, please open an issue first so the proposed change can be discussed before a pull request is prepared.
 
-- PCB revision
-- microphone model
-- emitter type and wavelength
-- emitter current
-- optical distance
-- modulation frequency
-- amplifier gain
-- oscilloscope captures
-- unexpected behaviour or failures
+Useful contributions include:
 
-Detailed measurements are particularly valuable because they make comparisons between different hardware revisions possible.
+- measurements from additional analogue MEMS microphones;
+- optical wavelength comparisons;
+- PCB and layout improvements;
+- current-control stability measurements;
+- oscilloscope captures and frequency-response data;
+- documentation corrections.
 
----
+## License
 
-## Repository Roadmap
+This project is made available under the **PolyForm Noncommercial License 1.0.0**.
 
-Future revisions may explore:
+Non-commercial research, educational and personal use is permitted subject to the terms of the license.
 
-- smaller PCB layouts,
-- alternative optical drivers,
-- different laser/LED wavelengths,
-- improved analog noise performance,
-- additional test points,
-- configurable amplifier gain,
-- automated frequency sweeps,
-- and systematic characterization of different MEMS microphones.
+**Commercial use requires a separate commercial license from the author.**
+
+See [`LICENSE`](LICENSE) for the controlling terms.
+
+## Author
+
+**Taylan Arslan**
+
+GitHub: [@manvetoxx](https://github.com/manvetoxx)
 
 ---
 
-## Disclaimer
+<div align="center">
 
-This is experimental hardware and is provided for research and educational use.
+### Light in. Audio out.
 
-PCB files should be reviewed before manufacturing. Component values, footprints, operating limits, and laser safety requirements should be independently verified before use.
+If this project helps your research, consider starring the repository.
+
+</div>
