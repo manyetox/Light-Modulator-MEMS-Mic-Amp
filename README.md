@@ -37,7 +37,7 @@ The transmitter has already been **bench-tested and is functional**. Receiver va
 The first assembled transmitter and receiver prototypes are shown below.
 
 <p align="center">
-  <img src="Media/Prototype.jpg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
+  <img src="Media/prototype.jpg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
 </p>
 
 ### Prototype Demonstration
