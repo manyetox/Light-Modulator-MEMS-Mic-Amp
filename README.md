@@ -234,7 +234,7 @@ Commercial licenses may be provided for a fee. For commercial licensing enquirie
 
 The project is provided **as-is, without warranty**. Users are responsible for verifying the design, selecting appropriate components, complying with applicable regulations, and following electrical and laser-safety requirements.
 
-See [`LICENSE`](LICENSE) for the complete terms.
+See [`LICENSE.md`](LICENSE) for the complete terms.
 ## Author
 
 **Taylan Arslan**
