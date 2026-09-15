@@ -156,6 +156,12 @@ The first assembled transmitter and receiver prototypes are shown below.
   <img src="media/prototype.jpg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
 </p>
 
+### Prototype Demonstration
+
+A short demonstration of the working optical audio system is available here:
+
+▶ **[Watch the prototype demonstration](media/prototype-demo.mp4)**
+
 ## Quick Start
 
 1. **Choose the optical source.** Start with an LED before moving to a laser diode.
