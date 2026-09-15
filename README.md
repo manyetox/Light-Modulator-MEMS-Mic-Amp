@@ -32,6 +32,27 @@ It consists of two PCBs:
 
 The transmitter has already been **bench-tested and is functional**. Receiver validation is ongoing.
 
+## Prototype
+
+The first assembled transmitter and receiver prototypes are shown below.
+
+<p align="center">
+  <img src="Media/Prototype.jpg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
+</p>
+
+### Prototype Demonstration
+
+The animation below shows the assembled transmitter prototype operating and modulating the optical output from a Bluetooth audio source.
+
+<p align="center">
+  <img src="Media/Transmitter-gif.gif" alt="Working optical audio transmitter prototype" width="450">
+</p>
+
+A longer demonstration of the prototype is also available:
+
+▶ **[Watch the full prototype demonstration](Media/prototype-demo.mp4)**
+
+
 ## System Architecture
 
 ```mermaid
@@ -148,19 +169,6 @@ The LM386 provides the final power amplification for an 8 Ω speaker.
 > [!NOTE]
 > The ADMP401 breakout includes its own amplification, so it should be evaluated separately before feeding it through the full onboard microphone gain stage.
 
-## Prototype
-
-The first assembled transmitter and receiver prototypes are shown below.
-
-<p align="center">
-  <img src="Media/prototype.jpeg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
-</p>
-
-### Prototype Demonstration
-
-A short demonstration of the working optical audio system is available here:
-
-▶ **[Watch the prototype demonstration](Media/prototype-demo.mp4)**
 
 ## Quick Start
 
