@@ -7,7 +7,7 @@
 [![Hardware](https://img.shields.io/badge/Hardware-PCB-2ea44f)](#)
 [![Designed with KiCad](https://img.shields.io/badge/Designed%20with-KiCad-314CB0?logo=kicad&logoColor=white)](https://www.kicad.org/)
 [![Status](https://img.shields.io/badge/status-prototype-orange)](#project-status)
-[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-blue)](#license)
+[![License](https://img.shields.io/badge/LICENSE-Copyright © 2026 Taylan Arslan-blue)](#LICENSE)
 
 **Bluetooth audio → current-modulated LED/laser → MEMS microphone → audio amplifier**
 
