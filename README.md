@@ -222,14 +222,19 @@ Useful contributions include:
 
 ## License
 
-This project is made available under the **PolyForm Noncommercial License 1.0.0**.
+Copyright © 2026 Taylan Arslan.
 
-Non-commercial research, educational and personal use is permitted subject to the terms of the license.
+This project is available for **research, educational, academic, personal, and other non-commercial use** under the terms of the [`LICENSE`](LICENSE) file.
 
-**Commercial use requires a separate commercial license from the author.**
+**Commercial use is not permitted under the public license.**
 
-See [`LICENSE`](LICENSE) for the controlling terms.
+Commercial manufacture, integration into a commercial product or service, internal commercial R&D, resale, or other commercial exploitation requires a **separate commercial license from the author**.
 
+Commercial licenses may be provided for a fee. For commercial licensing enquiries, please contact **Taylan Arslan**.
+
+The project is provided **as-is, without warranty**. Users are responsible for verifying the design, selecting appropriate components, complying with applicable regulations, and following electrical and laser-safety requirements.
+
+See [`LICENSE`](LICENSE) for the complete terms.
 ## Author
 
 **Taylan Arslan**
