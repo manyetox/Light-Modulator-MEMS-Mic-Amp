@@ -239,7 +239,7 @@ See [`LICENSE.md`](LICENSE) for the complete terms.
 
 **Taylan Arslan**
 
-GitHub: [@manvetoxx](https://github.com/manvetoxx)
+GitHub: [@manyetox](https://github.com/manvetoxx)
 
 ---
 
