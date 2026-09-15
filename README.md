@@ -76,6 +76,7 @@ flowchart LR
 ## Transmitter
 
 The transmitter converts Bluetooth audio into a controlled LED or laser current.
+<p align="center"><img src="Media/Schematic-Tx.png" alt="Transmitter schematic" width="850"></p>
 
 ```text
 Phone
