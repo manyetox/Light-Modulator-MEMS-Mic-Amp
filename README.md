@@ -148,6 +148,14 @@ The LM386 provides the final power amplification for an 8 Ω speaker.
 > [!NOTE]
 > The ADMP401 breakout includes its own amplification, so it should be evaluated separately before feeding it through the full onboard microphone gain stage.
 
+## Prototype
+
+The first assembled transmitter and receiver prototypes are shown below.
+
+<p align="center">
+  <img src="media/prototype.jpg" alt="Assembled transmitter and MEMS microphone receiver prototypes" width="450">
+</p>
+
 ## Quick Start
 
 1. **Choose the optical source.** Start with an LED before moving to a laser diode.
