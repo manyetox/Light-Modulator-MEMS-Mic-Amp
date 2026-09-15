@@ -78,9 +78,9 @@ The CA3140 compares the requested control voltage (`VSET`) with the voltage acro
 
 The approximate optical-source current is:
 
-\[
+$$
 I_{LED} \approx \frac{V_{SET}}{R_{SENSE}}
-\]
+$$
 
 This causes the LED or laser brightness to follow the audio waveform while maintaining an adjustable DC operating point.
 
